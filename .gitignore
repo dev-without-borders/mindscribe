@@ -38,6 +38,7 @@ tmp/
 *.m4a
 *.flac
 ffmpeg.exe
+start_mindscribe.bat
 
 # IDE
 .vscode/

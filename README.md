@@ -1,4 +1,4 @@
-🎙️ WhisperX GUI - Audio Transcription Tool
+🎙️ mindscribe GUI - Audio Transcription Tool
 
 Ein benutzerfreundliches GUI-Tool für hochpräzise Audio-Transkription mit WhisperX, optimiert für ADHS-freundliche Workflows und Wissensorganisation.
 ✨ Features
@@ -7,7 +7,6 @@ Ein benutzerfreundliches GUI-Tool für hochpräzise Audio-Transkription mit Whis
     🎬 YouTube Integration - Direkte Transkription von YouTube-Videos
     📝 Multiple Formate - TXT, SRT, VTT, JSON Export
     🌍 Auto-Spracherkennung - Erkennt Sprache automatisch
-    ⚡ Batch Processing - Mehrere Dateien gleichzeitig
     🔄 Speaker Diarization - Unterscheidet verschiedene Sprecher
     🧹 Auto-Cleanup - Temporäre Dateien werden automatisch gelöscht
     📂 Quick Access - Öffne Zielordner direkt aus dem Tool
