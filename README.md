@@ -9,6 +9,7 @@
 [![GitHub stars](https://img.shields.io/github/stars/dev-without-borders/mindscribe)](https://github.com/dev-without-borders/mindscribe/stargazers)
 
 Ein benutzerfreundliches GUI-Tool für hochpräzise Audio-Transkription mit WhisperX, optimiert für ADHS-freundliche Workflows und Wissensorganisation.
+
 ✨ Features
 
     🎯 Drag & Drop Support - Dateien einfach ins Fenster ziehen
@@ -33,8 +34,8 @@ Windows:
 # Mit Chocolatey:
 choco install ffmpeg
 
-# Oder manuell von: https://ffmpeg.org/download.html
-# Und zu PATH hinzufügen
+Oder manuell von: https://ffmpeg.org/download.html
+Und zu PATH hinzufügen
 
 Linux:
 
