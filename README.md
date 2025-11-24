@@ -241,11 +241,8 @@ Made with ❤️ for better focus and productivity
 
 ## 📸 Screenshots
 
-![Main Interface](docs/screenshot-main.png)
+![Main Interface](docs/mindscribe_gui_screenshot.png)
 *Einfaches Drag & Drop Interface*
-
-![Progress View](docs/screenshot-progress.png)
-*Live Transkriptions-Fortschritt*
 
 ---
 
