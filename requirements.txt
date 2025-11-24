@@ -1,0 +1,7 @@
+# WhisperX GUI - Core Dependencies
+whisperx==3.7.4
+tkinterdnd2
+yt-dlp
+
+# PyTorch wird von whisperx automatisch mitinstalliert
+# Für CUDA Support siehe: https://pytorch.org/get-started/locally/
