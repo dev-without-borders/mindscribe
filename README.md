@@ -1,5 +1,7 @@
 # 🎙️ mindscribe GUI - Audio Transcription Tool
 
+## README = beta!
+
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
@@ -235,3 +237,39 @@ Bei Fragen oder Problemen:
     💡 Discussions
 
 Made with ❤️ for better focus and productivity
+
+## 📸 Screenshots
+
+![Main Interface](docs/screenshot-main.png)
+*Einfaches Drag & Drop Interface*
+
+![Progress View](docs/screenshot-progress.png)
+*Live Transkriptions-Fortschritt*
+
+---
+
+## 🛠️ Tech Stack
+
+- **WhisperX** - State-of-the-art Speech Recognition
+- **PyTorch** - Deep Learning Backend
+- **tkinter** - Cross-platform GUI
+- **yt-dlp** - YouTube Download
+- **faster-whisper** - Optimized Inference
+
+---
+
+## 🤝 Contributing
+
+Contributions welcome! See [CONTRIBUTING.md](CONTRIBUTING.md)
+
+---
+
+## 📜 License
+
+MIT © 2024 [dev-without-borders](https://github.com/dev-without-borders)
+
+---
+
+## 🌟 Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=dev-without-borders/mindscribe&type=Date)](https://star-history.com/#dev-without-borders/mindscribe&Date)
