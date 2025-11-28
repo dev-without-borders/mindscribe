@@ -22,9 +22,14 @@
 - **📝 Multiple Formats** – Export as TXT, SRT, VTT, or JSON
 - **🌍 Auto Language Detection** – Detects language automatically
 - **🔄 Speaker Diarization** – Distinguishes between different speakers
-- **🛡️ Local & private** – Everything stays on your Machine
-- **🚀 CUDA-Support** – much faster with NVIDIA-GPUs (optional but recommended)
+- **🛡️ Local & Private** – Everything stays on your Machine
+- **🚀 CUDA-Support** – Much faster with NVIDIA-GPUs (optional but recommended)
+- **🖖 Free & Open-Source** – Feel free to distribute, contribute or just enjoy!
 ```
+
+
+![Main Interface](docs/mindscribe_gui_screenshot.png)
+
 
 **📋 Supported Formats (not all tested)**
 **Input:**
@@ -38,7 +43,6 @@
    - **.vtt** - WebVTT Subtitles
    - **.json** - JSON with Metadata
 
-![Main Interface](docs/mindscribe_gui_screenshot.png)
 
 ## **Requirements**
 
@@ -127,6 +131,14 @@
 
 ---
 
+## Disclaimer
+
+First real Python project, built with AI help, made in my free time.
+Be patient, contribute if you can! 
+And I'm using AI-assistance from different LLMs (Claude, Gemini, Mistral) and I feel no shame. Use the tools you have! 😊
+
+---
+
 ## Roadmap
 
 - Batch Processing
@@ -136,6 +148,7 @@
 - Modularity
 - Quick Infos for explanation
 - Documentation
+- Threading
 
 ---
 
