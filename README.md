@@ -1,248 +1,136 @@
-# 🎙️ mindscribe GUI - Audio Transcription Tool
+![mindscribe Preview Image](docs/mindscribe_preview.png)
 
-## README = beta!
+# mindscribe
 
+## *Audio Transcription GUI based on WhisperX*
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![GitHub issues](https://img.shields.io/github/issues/dev-without-borders/mindscribe)](https://github.com/dev-without-borders/mindscribe/issues)
 [![GitHub stars](https://img.shields.io/github/stars/dev-without-borders/mindscribe)](https://github.com/dev-without-borders/mindscribe/stargazers)
 
-Ein benutzerfreundliches GUI-Tool für hochpräzise Audio-Transkription mit WhisperX, optimiert für ADHS-freundliche Workflows und Wissensorganisation.
-
-✨ Features
-
-    🎯 Drag & Drop Support - Dateien einfach ins Fenster ziehen
-    🎬 YouTube Integration - Direkte Transkription von YouTube-Videos
-    📝 Multiple Formate - TXT, SRT, VTT, JSON Export
-    🌍 Auto-Spracherkennung - Erkennt Sprache automatisch
-    🔄 Speaker Diarization - Unterscheidet verschiedene Sprecher
-    🧹 Auto-Cleanup - Temporäre Dateien werden automatisch gelöscht
-    📂 Quick Access - Öffne Zielordner direkt aus dem Tool
-
-🚀 Installation
-1. Voraussetzungen
-
-    Python 3.9 - 3.11 (3.12+ noch nicht vollständig unterstützt)
-    FFmpeg muss installiert sein
-    CUDA (optional, für GPU-Beschleunigung)
-
-FFmpeg Installation:
-
-Windows:
-
-# Mit Chocolatey:
-choco install ffmpeg
-
-Oder manuell von: https://ffmpeg.org/download.html
-Und zu PATH hinzufügen
-
-Linux:
-
-sudo apt update && sudo apt install ffmpeg
-
-macOS:
-
-brew install ffmpeg
-
-2. Repository klonen / Download
-
-git clone https://github.com/deinusername/whisperx-gui.git
-cd whisperx-gui
-
-3. Virtual Environment erstellen
-
-# Virtual Environment erstellen
-python -m venv venv
-
-# Aktivieren
-# Windows:
-venv\Scripts\activate
-
-# Linux/macOS:
-source venv/bin/activate
-
-4. Dependencies installieren
-
-pip install -r requirements.txt
-
-Für CUDA-Unterstützung (NVIDIA GPU):
-
-# CUDA 11.8 (empfohlen):
-pip install torch torchaudio --index-url https://download.pytorch.org/whl/cu118
-
-# CUDA 12.1:
-pip install torch torchaudio --index-url https://download.pytorch.org/whl/cu121
-
-🎮 Verwendung
-Start
-
-python whisperx_gui.py
-
-Workflow
-
-    Source File(s) auswählen:
-        📁 Browse-Button
-        🖱️ Drag & Drop
-        🔗 YouTube-URL einfügen
-
-    Output Directory festlegen (optional - Standard: ./transcriptions)
-
-    Optionen konfigurieren:
-        🌍 Sprache (Auto-Detect empfohlen)
-        🎤 Model (large-v2 für beste Qualität)
-        🔄 Speaker Diarization aktivieren
-        📝 Output-Formate wählen
-
-    Transcribe klicken!
-
-    📂 Open Output Folder - Direkter Zugriff auf Ergebnisse
-
-📋 Unterstützte Formate
-Input:
-
-    Audio: .mp3, .wav, .m4a, .flac, .ogg, .aac, .wma
-    Video: .mp4, .avi, .mkv, .mov, .webm
-    Streaming: YouTube-URLs
-
-Output:
-
-    .txt - Einfacher Text
-    .srt - Untertitel (mit Timestamps)
-    .vtt - WebVTT Untertitel
-    .json - Vollständige Metadaten
-
-⚙️ Konfiguration
-Models
-Model 	Qualität 	Geschwindigkeit 	VRAM
-tiny 	⭐ 	⚡⚡⚡ 	~1 GB
-base 	⭐⭐ 	⚡⚡⚡ 	~1 GB
-small 	⭐⭐⭐ 	⚡⚡ 	~2 GB
-medium 	⭐⭐⭐⭐ 	⚡ 	~5 GB
-large-v2 	⭐⭐⭐⭐⭐ 	⚡ 	~10 GB
-
-Empfehlung: large-v2 für beste Ergebnisse
-Speaker Diarization
-
-Benötigt HuggingFace Token:
-
-    Erstelle Account auf huggingface.co
-    Gehe zu Settings → Access Tokens
-    Erstelle Token und füge es im GUI ein
-    Akzeptiere die Bedingungen für:
-        pyannote/segmentation
-        pyannote/speaker-diarization
-
-🎯 ADHS-optimierte Features
-
-    Visuelle Fortschrittsanzeige - Immer wissen wo du stehst
-    Log-Fenster - Alle Aktionen nachvollziehbar
-    Quick-Access - Zielordner sofort öffnen
-    Auto-Cleanup - Keine temporären Datei-Leichen
-    Batch-Processing - Alles auf einmal erledigen
-    YouTube-Direct - Kein manuelles Download nötig
-
-💡 Workflow-Tipps
-
-Für Podcasts/Interviews:
-
-✅ Speaker Diarization aktivieren
-✅ large-v2 Model
-✅ SRT + TXT Export
-
-Für schnelle Notizen:
-
-✅ Auto-Detect Language
-✅ small/medium Model
-✅ Nur TXT Export
-
-Für YouTube-Recherche:
-
-✅ URL direkt einfügen
-✅ Source files löschen aktivieren
-✅ Alle Formate exportieren
-
-🔧 Troubleshooting
-"FFmpeg not found"
-
-# Teste ob FFmpeg verfügbar ist:
-ffmpeg -version
-
-# Falls nicht, installiere es (siehe oben)
-
-"CUDA out of memory"
-
-    Verwende kleineres Model (medium statt large-v2)
-    Schließe andere GPU-Programme
-    Reduziere batch_size im Code
-
-"ModuleNotFoundError: tkinterdnd2"
-
-pip install tkinterdnd2 --force-reinstall
-
-YouTube Download schlägt fehl
-
-# Aktualisiere yt-dlp:
-pip install -U yt-dlp
-
-Langsame Transkription (CPU)
-
-    Nutze kleineres Model
-    Oder installiere CUDA-Support (siehe oben)
-
-📦 PyInstaller Build (Optional)
-
-Erstelle standalone .exe:
-
-# Install PyInstaller
-pip install pyinstaller
-
-# Build
-pyinstaller --onefile --windowed --name="WhisperX-GUI" whisperx_gui.py
-
-# Executable in: dist/WhisperX-GUI.exe
-
-⚠️ Wichtig: FFmpeg muss trotzdem separat installiert sein!
-🤝 Integration mit Obsidian
-
-Perfect für Wissensmanagement:
-
-    Setze Output Directory auf Obsidian Vault
-    Nutze TXT-Format
-    Erstelle Template für Metadaten:
-
-    ---
-    source: {{filename}}
-    date: {{date}}
-    type: transcription
-    ---
-
-    # {{title}}
-
-    {{transcript}}
-
-📄 License
-
-MIT License - Siehe LICENSE Datei
-🙏 Credits
-
-    WhisperX - Max Bain
-    OpenAI Whisper
-    yt-dlp
-
-💬 Support
-
-Bei Fragen oder Problemen:
-
-    🐛 Issues
-    💡 Discussions
-
-Made with ❤️ for better focus and productivity
-
-## 📸 Screenshots
+---
+
+**A user-friendly and free GUI tool for high-precision audio transcription with WhisperX, optimized for ease-of-use and simple workflows.**
+
+## ✨ **Features**
+
+```markdown
+- **🎯 Drag & Drop Support** – Simply drag files into the window
+- **📁 Local or URL Source** – Transcribe local files or from online URL
+- **🎬 YouTube Integration** – Direct transcription from YouTube videos
+- **📝 Multiple Formats** – Export as TXT, SRT, VTT, or JSON
+- **🌍 Auto Language Detection** – Detects language automatically
+- **🔄 Speaker Diarization** – Distinguishes between different speakers
+- **🚀 CUDA-Support** – much faster with NVIDIA-GPUs (optional but recommended)
+```
+
+**📋 Supported Formats (not all tested)**
+**Input:**
+    **Audio**: .mp3, .wav, .m4a, .flac, .ogg, .aac, .wma
+    **Video**: .mp4, .avi, .mkv, .mov, .webm
+    **Streaming**: YouTube-URLs
+
+**Output:**
+    **.txt** - Simple Text
+    **.srt** - Subtitles (with Timestamps)
+    **.vtt** - WebVTT Subtitles
+    **.json** - JSON with Metadata
 
 ![Main Interface](docs/mindscribe_gui_screenshot.png)
-*Einfaches Drag & Drop Interface*
+
+## **Requirements**
+
+- **Python 3.9+**
+- Download ffmpeg [here](https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip) (Windows version).
+
+***For GPU-Support:***
+
+- **NVIDIA GPU** (tested on 8GB VRAM with BatchSize=8 and int8) 
+- **CUDA** (get it on [CUDA Platform for Accelerated Computing | NVIDIA Developer](https://developer.nvidia.com/cuda))
+- **pytorch** that fits to your GPU (follow installation instructions on the [PyTorch website](https://pytorch.org/get-started/locally/))
+
+***For Speaker Diarization:***
+
+- To **Create Token** (free) at https://huggingface.co/
+    -> Register or Log In
+    -> **Accept End User Agreement** on    
+  
+     [pyannote audio](https://github.com/pyannote/pyannote-audio)
+     and
+     [silero vad](https://github.com/snakers4/silero-vad)
+  
+    -> **Create Token**
+
+---
+
+## **Installation**
+
+-> **Install Python 3.9+ FIRST**
+
+***Automatic Installer***
+
+1. **Download** the latest release of mindscribe from the [releases page](https://github.com/dev-without-borders/mindscribe/releases) and unzip it to a new directory of your choice.`
+
+2. For GPU-acceleration with **CUDA download and install**
+   [Download CUDA](https://developer.nvidia.com/cuda)
+
+3. **Download and copy ffmpeg.exe** to mindscribe-directory
+   [Download ffmpeg (Windows](https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip)
+
+4. Run **SETUP.bat**. This script will install Python dependencies and set up the environment. 
+
+5. **Follow Instructions**
+
+6. From the mindscribe directory, **start the application** with:
+   
+   ```batch
+   python mindscribe.py
+   ```
+
+***Manual Install***
+
+1. Clone Repository or download
+   
+   ```batch
+   git clone https://github.com/dev-without-borders/mindscribe.git
+   cd mindscribe
+   pip install -r requirements.txt
+   ```
+
+2. For GPU-acceleration with **CUDA download and install**
+   [Download CUDA](https://developer.nvidia.com/cuda)
+
+3. **Download and copy ffmpeg.exe** to mindscribe-directory
+   [Download ffmpeg (Windows](https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip)
+
+4. Start with
+   
+   ```batch
+   python mindscribe.py
+   ```
+
+---
+
+## Quickstart
+
+1. Choose local file, URL or Youtube link.
+2. Choose or generate output file name.
+3. Select settings to your needs.
+4. Select output directory and format.
+5. Click "Transcribe".
+
+---
+
+## Roadmap
+
+- Batch Processing
+- Voice Recording
+- CLI Integration
+- .md-Output for Obsidian
+- Modularity
+- Quick Infos for explanation
+- Documentation
 
 ---
 
@@ -256,15 +144,15 @@ Made with ❤️ for better focus and productivity
 
 ---
 
-## 🤝 Contributing
+## Issues
 
-Contributions welcome! See [CONTRIBUTING.md](CONTRIBUTING.md)
+Please report bugs or suggest features on GitHub Issues.
 
 ---
 
 ## 📜 License
 
-MIT © 2024 [dev-without-borders](https://github.com/dev-without-borders)
+MIT © 2025 [dev-without-borders](https://github.com/dev-without-borders)
 
 ---
 

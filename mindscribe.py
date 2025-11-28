@@ -12,9 +12,43 @@ from datetime import datetime
 import json
 import subprocess
 import os
-from tkinterdnd2 import DND_FILES, TkinterDnD
 
-class mindscribeGUI:
+# Ensure TkinterDnD is available and import it
+try:
+    from tkinterdnd2 import DND_FILES, TkinterDnD
+except ImportError:
+    messagebox.showerror("Import Error", "TkinterDnD2 not found. Please install it using 'pip install tkinterdnd2'.")
+    sys.exit(1)
+
+# Ensure yt_dlp is available and import it
+try:
+    import yt_dlp
+except ImportError:
+    messagebox.showerror("Import Error", "yt-dlp not found. Please install it using 'pip install yt-dlp'.")
+    sys.exit(1)
+
+# Ensure whisperx is available and import it (only for type hinting and potential future direct use)
+# Actual WhisperX execution is via subprocess for better isolation and resource management.
+try:
+    import whisperx
+    # Check for HuggingFace token proactively
+    HF_TOKEN = os.environ.get("HF_TOKEN")
+except ImportError:
+    messagebox.showwarning("Import Warning", "whisperx not found. While not strictly required for this GUI to *run* (as it uses subprocess), direct import might fail. Ensure it's installed via 'pip install -U whisperx'.")
+    HF_TOKEN = os.environ.get("HF_TOKEN")
+except Exception as e:
+    messagebox.showwarning("HuggingFace Token Check", f"Could not check HuggingFace token during whisperx import: {e}. Diarization might fail without it.")
+    HF_TOKEN = os.environ.get("HF_TOKEN")
+
+# Safe Import für Drag & Drop (verhindert Absturz, falls nicht installiert)
+try:
+    from tkinterdnd2 import DND_FILES, TkinterDnD
+    DND_AVAIL = True
+except ImportError:
+    DND_AVAIL = False
+    print("Warning: tkinterdnd2 not found. Drag & Drop will be disabled.")
+
+class MindscribeGUI:
     def __init__(self, root):
         self.root = root
         self.root.title("WhisperX Transcription")
@@ -64,9 +98,10 @@ class mindscribeGUI:
         self.file_entry = ttk.Entry(source_frame, width=70)
         self.file_entry.pack(side=tk.LEFT, fill=tk.X, expand=True)
         
-        # ✅ Drag & Drop support
-        self.file_entry.drop_target_register(DND_FILES)
-        self.file_entry.dnd_bind('<<Drop>>', lambda e: self.on_drop(e, self.file_entry))
+        # ✅ Drag & Drop support (conditional)
+        if DND_AVAIL:
+            self.file_entry.drop_target_register(DND_FILES)
+            self.file_entry.dnd_bind('<<Drop>>', lambda e: self.on_drop(e, self.file_entry))
         
         # ✅ Right-click menu
         self.create_context_menu(self.file_entry)
@@ -163,8 +198,9 @@ class mindscribeGUI:
         self.output_dir_entry.pack(side=tk.LEFT, fill=tk.X, expand=True)
         
         # ✅ Drag & Drop + Right-click for output dir
-        self.output_dir_entry.drop_target_register(DND_FILES)
-        self.output_dir_entry.dnd_bind('<<Drop>>', lambda e: self.on_drop(e, self.output_dir_entry))
+        if DND_AVAIL:
+            self.output_dir_entry.drop_target_register(DND_FILES)
+            self.output_dir_entry.dnd_bind('<<Drop>>', lambda e: self.on_drop(e, self.output_dir_entry))
         self.create_context_menu(self.output_dir_entry)
         
         ttk.Button(output_frame, text="Browse", command=self.browse_output_dir).pack(side=tk.LEFT, padx=5)
@@ -293,44 +329,54 @@ class mindscribeGUI:
         return any(domain in url.lower() for domain in youtube_domains)
     
     def auto_generate_filename(self):
-        """Auto-generate filename from source"""
+        """Auto-generate filename from source (threaded to prevent freezing)"""
         source = self.file_entry.get().strip()
         
         if not source:
             messagebox.showwarning("No Source", "Please enter a source file/URL first")
             return
-        
+
+        # Start background thread
+        self.progress_var.set("Fetching title...")
+        thread = threading.Thread(target=self._auto_filename_worker, args=(source,), daemon=True)
+        thread.start()
+
+    def _auto_filename_worker(self, source):
+        """Background worker for auto_generate_filename"""
         try:
+            new_filename = ""
             if self.is_youtube_url(source):
                 # Extract YouTube title
                 self.log("Fetching YouTube title...")
                 with yt_dlp.YoutubeDL({'quiet': True}) as ydl:
                     info = ydl.extract_info(source, download=False)
                     title = info['title']
-                    # Clean filename
-                    title = "".join(c for c in title if c.isalnum() or c in (' ', '-', '_')).strip()
-                    self.filename_entry.delete(0, tk.END)
-                    self.filename_entry.insert(0, title)
-                    self.log(f"✓ Generated: {title}")
+                    new_filename = "".join(c for c in title if c.isalnum() or c in (' ', '-', '_')).strip()
+                    self.log(f"✓ Found: {title}")
             
             elif source.startswith(('http://', 'https://')):
                 # URL filename
                 filename = source.split('/')[-1]
-                name = Path(filename).stem
-                self.filename_entry.delete(0, tk.END)
-                self.filename_entry.insert(0, name)
-                self.log(f"✓ Generated: {name}")
+                new_filename = Path(filename).stem
             
             else:
                 # Local file
-                name = Path(source).stem
-                self.filename_entry.delete(0, tk.END)
-                self.filename_entry.insert(0, name)
-                self.log(f"✓ Generated: {name}")
+                new_filename = Path(source).stem
+
+            # Update GUI in main thread
+            if new_filename:
+                self.root.after(0, lambda: self._update_filename_entry(new_filename))
         
         except Exception as e:
-            self.log(f"✗ Auto-generate failed: {e}", "error")
-            messagebox.showerror("Error", f"Could not generate filename:\n{e}")
+            self.root.after(0, lambda: self.log(f"✗ Auto-generate failed: {e}", "error"))
+            self.root.after(0, lambda: messagebox.showerror("Error", f"Could not generate filename:\n{e}"))
+        finally:
+            self.root.after(0, lambda: self.progress_var.set("Ready"))
+
+    def _update_filename_entry(self, name):
+        self.filename_entry.delete(0, tk.END)
+        self.filename_entry.insert(0, name)
+        self.log(f"✓ Generated: {name}")
     
     def browse_file(self):
         filename = filedialog.askopenfilename(
@@ -481,6 +527,23 @@ class mindscribeGUI:
             self.log("✗ FFmpeg not found!", "error")
             raise RuntimeError("FFmpeg not installed")
     
+    def get_temp_dir(self):
+        """
+        Create and return a temporary directory INSIDE the selected output directory.
+        Fulfills requirement: 'temp path same as output path'
+        """
+        output_path = Path(self.output_dir_var.get())
+        
+        # Ensure output path exists
+        if not output_path.exists():
+            output_path.mkdir(parents=True, exist_ok=True)
+            
+        # Create a dedicated temp folder inside the output dir
+        temp_path = output_path / "_temp_work"
+        temp_path.mkdir(exist_ok=True)
+        
+        return temp_path
+
     def get_audio_file(self, file_path):
         """Handle local files, URLs, and YouTube links"""
         
@@ -492,10 +555,9 @@ class mindscribeGUI:
             if local_path.suffix.lower() != '.wav':
                 self.log(f"Converting local file to WAV: {local_path.name}")
                 
-                temp_dir = Path("F:/leech/whisperx_tmp")
-                temp_dir.mkdir(parents=True, exist_ok=True)
-                
+                temp_dir = self.get_temp_dir()
                 wav_path = temp_dir / f"{local_path.stem}_converted.wav"
+                
                 self.convert_to_wav(local_path, wav_path)
                 
                 # ✅ Track temp file for cleanup
@@ -507,20 +569,19 @@ class mindscribeGUI:
         
         # URL or YouTube
         if file_path.startswith(('http://', 'https://')) or self.is_youtube_url(file_path):
-            temp_dir = Path("F:/leech/whisperx_tmp")
-            temp_dir.mkdir(parents=True, exist_ok=True)
-            
+            temp_dir = self.get_temp_dir()
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             
             # YouTube
             if self.is_youtube_url(file_path):
                 self.log(f"Downloading YouTube video: {file_path}")
                 
-                # ✅ Use unique temp name first
+                # ✅ Use unique temp name
                 temp_output = temp_dir / f"yt_download_{timestamp}"
                 
                 ydl_opts = {
-                    'format': 'bestaudio/best',
+                    # Optimization: Prefer m4a/opus (smaller) over best video
+                    'format': 'bestaudio[ext=m4a]/bestaudio/best',
                     'postprocessors': [{
                         'key': 'FFmpegExtractAudio',
                         'preferredcodec': 'wav',
@@ -538,7 +599,7 @@ class mindscribeGUI:
                     downloaded_file = temp_output.with_suffix('.wav')
                     
                     if not downloaded_file.exists():
-                        # Fallback: search for any wav in temp dir with timestamp
+                        # Fallback search
                         possible_files = list(temp_dir.glob(f"yt_download_{timestamp}*.wav"))
                         if possible_files:
                             downloaded_file = possible_files[0]
@@ -578,8 +639,11 @@ class mindscribeGUI:
                 wav_file = temp_dir / f"{base_name}_{timestamp}.wav"
                 self.convert_to_wav(temp_file, wav_file)
                 
-                # ✅ Delete temp, keep WAV temporarily
-                temp_file.unlink()
+                # ✅ Delete raw temp, keep WAV temporarily
+                try:
+                    temp_file.unlink()
+                except:
+                    pass
                 
                 return str(wav_file)
     
@@ -596,6 +660,15 @@ class mindscribeGUI:
                 self.log(f"⚠ Could not delete {temp_file.name}: {e}", "warning")
         
         self.temp_files.clear()
+        
+        # Try to remove the temp directory if empty
+        try:
+            temp_dir = self.get_temp_dir()
+            if temp_dir.exists() and not any(temp_dir.iterdir()):
+                temp_dir.rmdir()
+                self.log("🗑️ Cleaned up empty temp folder")
+        except:
+            pass
     
     def ask_cleanup_source(self, source_path):
         """Ask user if downloaded source file should be deleted"""
@@ -633,7 +706,7 @@ class mindscribeGUI:
             audio_file = self.get_audio_file(original_input)
             audio_path = Path(audio_file)
 
-            # Check if this was a download
+            # Check if this was a download (URL or YouTube)
             is_downloaded = (
                 original_input.startswith(('http://', 'https://')) or 
                 self.is_youtube_url(original_input)
@@ -653,11 +726,11 @@ class mindscribeGUI:
                 if new_path.exists():
                     response = messagebox.askyesno(
                         "File exists",
-                        f"File already exists:\n{new_path.name}\n\nOverwrite?"
+                        f"File already exists in temp:\n{new_path.name}\n\nOverwrite?"
                     )
                     if response:
                         new_path.unlink()
-                        self.log(f"Deleted existing: {new_path.name}")
+                        self.log(f"Deleted existing temp file: {new_path.name}")
                     else:
                         self.log("✗ User cancelled - file exists", "error")
                         self.cleanup_temp_files()
@@ -667,7 +740,7 @@ class mindscribeGUI:
                     audio_path.rename(new_path)
                     audio_path = new_path
                     audio_file = str(audio_path)
-                    self.log(f"✓ Renamed to: {audio_path.name}")
+                    self.log(f"✓ Renamed temp file to: {audio_path.name}")
                 except Exception as e:
                     self.log(f"⚠ Rename failed, using original name: {e}", "warning")
 
@@ -744,9 +817,9 @@ class mindscribeGUI:
                         device=device
                     )
                     
-                    # ✅ WICHTIG: Übergebe 'audio' (Waveform), nicht 'audio_file' (Path)!
+                    # Pass audio waveform, not path
                     diarize_segments = diarize_model(
-                        audio,  # ← Die geladene Waveform
+                        audio,
                         min_speakers=min_spk,
                         max_speakers=max_spk
                     )
@@ -758,7 +831,7 @@ class mindscribeGUI:
                     self.log(f"⚠ Diarization failed: {e}", "warning")
                     self.log("Continuing without speaker labels...")
 
-            # === EXPORT MIT WHISPERX WRITERS ===
+            # === EXPORT ===
             self.progress_var.set("Exporting results...")
             
             output_dir = Path(settings["output_dir"])
@@ -767,7 +840,6 @@ class mindscribeGUI:
             # Determine output filename
             if settings["output_filename"]:
                 output_name = settings["output_filename"]
-                # Clean filename
                 output_name = "".join(c for c in output_name if c.isalnum() or c in (' ', '-', '_', '.')).strip()
             else:
                 output_name = audio_path.stem
@@ -780,7 +852,6 @@ class mindscribeGUI:
             
             for fmt in settings["output_formats"]:
                 if fmt == "all":
-                    # Export all formats
                     for sub_fmt in ["txt", "srt", "vtt", "tsv", "json"]:
                         output_file = output_dir / f"{output_name}.{sub_fmt}"
                         try:
@@ -799,16 +870,12 @@ class mindscribeGUI:
                 output_file = output_dir / f"{output_name}.{fmt}"
                 
                 try:
-                    # Get the appropriate writer from whisperx.utils
                     writer = get_writer(fmt, str(output_dir))
-                    
-                    # Write the output
                     writer(result, str(output_file.stem), {
                         "max_line_width": None,
                         "max_line_count": None,
                         "highlight_words": False
                     })
-                    
                     exported_files.append(output_file)
                     self.log(f"✓ Exported: {output_file.name}")
                     
@@ -821,34 +888,38 @@ class mindscribeGUI:
             self.progress.stop()
             self.progress_var.set("Complete!")
 
-            # Delete temp WAV (if it exists)
-            if audio_path.exists() and str(audio_path.parent) == "F:\\leech\\whisperx_tmp":
-                # Ask about downloaded source only if it's the original download
+            # Cleanup Logic
+            # Check if current audio_path is inside our temp dir
+            temp_dir = self.get_temp_dir()
+            is_in_temp = temp_dir in audio_path.parents
+
+            if is_in_temp:
                 if is_downloaded:
+                    # If it was a download, ask user if they want to keep the WAV
+                    # (Usually we assume users want the text, not the wav, but logic is preserved)
                     self.root.after(0, lambda: self.ask_cleanup_source(audio_path))
                 else:
-                    # Auto-delete converted temps
+                    # It was a local file converted to WAV -> Auto delete temp WAV
                     try:
                         audio_path.unlink()
-                        self.log(f"🗑️ Deleted temp: {audio_path.name}")
+                        self.log(f"🗑️ Deleted temp wav: {audio_path.name}")
                     except Exception as e:
                         self.log(f"⚠ Could not delete temp: {e}", "warning")
+            
+            # Final attempt to clean temp dir if empty
+            self.root.after(1000, self.cleanup_temp_files)
 
             # Success message
             self.log("="*60)
             self.log("✓ Transcription complete!")
             self.log(f"  Output: {output_dir}")
-            self.log(f"  Files: {len(exported_files)}")
-            for f in exported_files:
-                self.log(f"    - {f.name}")
             self.log("="*60)
             
             self.root.after(0, lambda: messagebox.showinfo(
                 "Success",
                 f"Transcription complete!\n\n"
                 f"Output: {output_dir}\n"
-                f"Files: {len(exported_files)}\n"
-                f"Formats: {', '.join(settings['output_formats'])}"
+                f"Files: {len(exported_files)}"
             ))
 
             # Cleanup memory
@@ -874,23 +945,23 @@ class mindscribeGUI:
                 f"Transcription failed:\n\n{str(e)}"
             ))
 
-            # Cleanup on error
             self.cleanup_temp_files()
 
-
-
 def main():
-    # Check if started from context menu
-    if len(sys.argv) > 1:
+    if DND_AVAIL and len(sys.argv) > 1:
         root = TkinterDnD.Tk()
-        app = mindscribeGUI(root)
+    elif DND_AVAIL:
+        root = TkinterDnD.Tk()
+    else:
+        root = tk.Tk()
+
+    app = MindscribeGUI(root)
+    
+    if len(sys.argv) > 1:
         app.file_entry.insert(0, sys.argv[1])
         app.detect_url_type(None)
-        root.mainloop()
-    else:
-        root = TkinterDnD.Tk()
-        app = mindscribeGUI(root)
-        root.mainloop()
+    
+    root.mainloop()
 
 if __name__ == "__main__":
     main()
