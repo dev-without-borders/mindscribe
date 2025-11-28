@@ -22,20 +22,21 @@
 - **📝 Multiple Formats** – Export as TXT, SRT, VTT, or JSON
 - **🌍 Auto Language Detection** – Detects language automatically
 - **🔄 Speaker Diarization** – Distinguishes between different speakers
+- **🛡️ Local & private** – Everything stays on your Machine
 - **🚀 CUDA-Support** – much faster with NVIDIA-GPUs (optional but recommended)
 ```
 
 **📋 Supported Formats (not all tested)**
 **Input:**
-    **Audio**: .mp3, .wav, .m4a, .flac, .ogg, .aac, .wma
-    **Video**: .mp4, .avi, .mkv, .mov, .webm
-    **Streaming**: YouTube-URLs
+   - **Audio**: .mp3, .wav, .m4a, .flac, .ogg, .aac, .wma
+   - **Video**: .mp4, .avi, .mkv, .mov, .webm
+   - **Streaming**: YouTube-URLs
 
 **Output:**
-    **.txt** - Simple Text
-    **.srt** - Subtitles (with Timestamps)
-    **.vtt** - WebVTT Subtitles
-    **.json** - JSON with Metadata
+   - **.txt** - Simple Text
+   - **.srt** - Subtitles (with Timestamps)
+   - **.vtt** - WebVTT Subtitles
+   - **.json** - JSON with Metadata
 
 ![Main Interface](docs/mindscribe_gui_screenshot.png)
 
@@ -52,8 +53,8 @@
 
 ***For Speaker Diarization:***
 
-- To **Create Token** (free) at https://huggingface.co/
-    -> Register or Log In
+- To **Create Token** (free, just for intital model-download!) at https://huggingface.co/
+    -> **Register or Log In**
     -> **Accept End User Agreement** on    
   
      [pyannote audio](https://github.com/pyannote/pyannote-audio)
@@ -73,10 +74,12 @@
 1. **Download** the latest release of mindscribe from the [releases page](https://github.com/dev-without-borders/mindscribe/releases) and unzip it to a new directory of your choice.`
 
 2. For GPU-acceleration with **CUDA download and install**
-   [Download CUDA](https://developer.nvidia.com/cuda)
+
+[Download CUDA](https://developer.nvidia.com/cuda)
 
 3. **Download and copy ffmpeg.exe** to mindscribe-directory
-   [Download ffmpeg (Windows](https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip)
+
+[Download ffmpeg (Windows)](https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip)
 
 4. Run **SETUP.bat**. This script will install Python dependencies and set up the environment. 
 
@@ -99,10 +102,12 @@
    ```
 
 2. For GPU-acceleration with **CUDA download and install**
-   [Download CUDA](https://developer.nvidia.com/cuda)
+
+[Download CUDA](https://developer.nvidia.com/cuda)
 
 3. **Download and copy ffmpeg.exe** to mindscribe-directory
-   [Download ffmpeg (Windows](https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip)
+
+[Download ffmpeg (Windows](https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip)
 
 4. Start with
    
