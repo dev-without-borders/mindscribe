@@ -30,6 +30,7 @@
 
 
 **📋 Supported Formats (not all tested)**
+
 **Input:**
    - **Audio**: .mp3, .wav, .m4a, .flac, .ogg, .aac, .wma
    - **Video**: .mp4, .avi, .mkv, .mov, .webm
