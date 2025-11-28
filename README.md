@@ -56,15 +56,16 @@
 
 ***For Speaker Diarization:***
 
-- To **Create Token** (free, just for intital model-download!) at https://huggingface.co/
-    -> **Register or Log In**
-    -> **Accept End User Agreement** on    
+- To **Create Token** (free, just for intital model-download) at https://huggingface.co/
+
+   - **Register or Log In**
+   - **Accept End User Agreement** on    
   
-     [pyannote audio](https://github.com/pyannote/pyannote-audio)
+     [pyannote audio - segmentation](https://huggingface.co/pyannote/segmentation-3.0)
      and
-     [silero vad](https://github.com/snakers4/silero-vad)
+     [pyannote audio - diarization](https://huggingface.co/pyannote/speaker-diarization-3.1)
   
-    -> **Create Token** (insert into GUI to download diarization models)
+   - **Create Token** via personal menu -> "Access Tokens" (insert token into GUI to download diarization models)
 
 
 ## **Installation**
@@ -160,10 +161,22 @@ And I'm using AI-assistance from different LLMs (Claude, Gemini, Mistral) and I 
 
 
 
-## Issues
+## Powered By
+
+This wouldn't exist without:
+
+- [whisperx](https://github.com/m-bain/whisperX)
+- [pyannote audio](https://github.com/pyannote/pyannote-audio)
+- [silero vad](https://github.com/snakers4/silero-vad)
+
+...and so many others!
+
+
+## Issues & Contact
 
 Please report bugs or suggest features on GitHub Issues.
 
+If you like, send me a mail: [borderless-dev@pm.me](mailto:borderless-dev@pm.me)
 
 
 ## 📜 License
