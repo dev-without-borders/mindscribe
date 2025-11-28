@@ -2,30 +2,28 @@
 
 # mindscribe
 
-## *Audio Transcription GUI based on WhisperX*
-
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![GitHub issues](https://img.shields.io/github/issues/dev-without-borders/mindscribe)](https://github.com/dev-without-borders/mindscribe/issues)
 [![GitHub stars](https://img.shields.io/github/stars/dev-without-borders/mindscribe)](https://github.com/dev-without-borders/mindscribe/stargazers)
 
----
+## *Audio Transcription GUI based on WhisperX*
+
 
 **A user-friendly and free GUI tool for high-precision audio transcription with WhisperX, optimized for ease-of-use and simple workflows.**
 
 ## ✨ **Features**
 
-```markdown
-- **🎯 Drag & Drop Support** – Simply drag files into the window
-- **📁 Local or URL Source** – Transcribe local files or from online URL
-- **🎬 YouTube Integration** – Direct transcription from YouTube videos
-- **📝 Multiple Formats** – Export as TXT, SRT, VTT, or JSON
-- **🌍 Auto Language Detection** – Detects language automatically
-- **🔄 Speaker Diarization** – Distinguishes between different speakers
-- **🛡️ Local & Private** – Everything stays on your Machine
-- **🚀 CUDA-Support** – Much faster with NVIDIA-GPUs (optional but recommended)
-- **🖖 Free & Open-Source** – Feel free to distribute, contribute or just enjoy!
-```
+
+- 🎯 **Drag & Drop Support** – Simply drag files into the window
+- 📁 **Local or URL Source** – Transcribe local files or from online URL
+- 🎬 **YouTube Integration** – Direct transcription from YouTube videos
+- 📝 **Multiple Formats** – Export as TXT, SRT, VTT, or JSON
+- 🌍 **Auto Language Detection** – Detects language automatically
+- 🔄 **Speaker Diarization** – Distinguishes between different speakers
+- 🛡️ **Local & Private** – Everything stays on your Machine
+- 🚀 **CUDA-Support** – Much faster with NVIDIA-GPUs (optional but recommended)
+- 🖖 **Free & Open-Source** – Feel free to distribute, contribute or just enjoy!
 
 
 ![Main Interface](docs/mindscribe_gui_screenshot.png)
@@ -65,9 +63,8 @@
      and
      [silero vad](https://github.com/snakers4/silero-vad)
   
-    -> **Create Token**
+    -> **Create Token** (insert into GUI to download diarization models)
 
----
 
 ## **Installation**
 
@@ -79,11 +76,11 @@
 
 2. For GPU-acceleration with **CUDA download and install**
 
-[Download CUDA](https://developer.nvidia.com/cuda)
+     [Download CUDA](https://developer.nvidia.com/cuda)
 
 3. **Download and copy ffmpeg.exe** to mindscribe-directory
 
-[Download ffmpeg (Windows)](https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip)
+     [Download ffmpeg (Windows)](https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip)
 
 4. Run **SETUP.bat**. This script will install Python dependencies and set up the environment. 
 
@@ -107,11 +104,11 @@
 
 2. For GPU-acceleration with **CUDA download and install**
 
-[Download CUDA](https://developer.nvidia.com/cuda)
+     [Download CUDA](https://developer.nvidia.com/cuda)
 
 3. **Download and copy ffmpeg.exe** to mindscribe-directory
 
-[Download ffmpeg (Windows](https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip)
+     [Download ffmpeg (Windows)](https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip)
 
 4. Start with
    
@@ -119,7 +116,7 @@
    python mindscribe.py
    ```
 
----
+
 
 ## Quickstart
 
@@ -129,15 +126,15 @@
 4. Select output directory and format.
 5. Click "Transcribe".
 
----
+
 
 ## Disclaimer
 
-First real Python project, built with AI help, made in my free time.
+First "real" Python project, built with AI help, made in my free time.
 Be patient, contribute if you can! 
 And I'm using AI-assistance from different LLMs (Claude, Gemini, Mistral) and I feel no shame. Use the tools you have! 😊
 
----
+
 
 ## Roadmap
 
@@ -150,7 +147,7 @@ And I'm using AI-assistance from different LLMs (Claude, Gemini, Mistral) and I 
 - Documentation
 - Threading
 
----
+
 
 ## 🛠️ Tech Stack
 
@@ -160,19 +157,19 @@ And I'm using AI-assistance from different LLMs (Claude, Gemini, Mistral) and I 
 - **yt-dlp** - YouTube Download
 - **faster-whisper** - Optimized Inference
 
----
+
 
 ## Issues
 
 Please report bugs or suggest features on GitHub Issues.
 
----
+
 
 ## 📜 License
 
 MIT © 2025 [dev-without-borders](https://github.com/dev-without-borders)
 
----
+
 
 ## 🌟 Star History
 
